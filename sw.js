@@ -1,9 +1,9 @@
-const CACHE_NAME = 'visitaco-v1';
+const CACHE_NAME = 'visitaco-v3';
 const ASSETS = [
-  './index.html',
-  './manifest.json',
-  './icona-192.png',
-  './icona-512.png'
+  '/VisitaCO/index.html',
+  '/VisitaCO/manifest.json',
+  '/VisitaCO/icona-192.png',
+  '/VisitaCO/icona-512.png'
 ];
 
 self.addEventListener('install', (e) => {
