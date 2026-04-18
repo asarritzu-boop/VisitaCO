@@ -21,13 +21,15 @@
 <meta name="twitter:image" content="https://asarritzu-boop.github.io/VisitaCO/icona-512.png">
 
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('PWA: Service Worker registrato con successo!', reg))
-        .catch(err => console.error('PWA: Errore registrazione Service Worker:', err));
-    });
-  }
+    // Registrazione Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/ODG/sw.js')
+                .then(reg => console.log('SW registrato:', reg.scope))
+                .catch(err => console.warn('SW non registrato:', err));
+        });
+    }
+
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
