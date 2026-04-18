@@ -3079,7 +3079,7 @@ const fabSection = document.getElementById('fab-section-wrap');
 
 
 if (fabSection) {
-  if (currentSectionId === 'prospetto-settimana') {
+  if (id === 'page-inner' && currentSectionId === 'prospetto-settimana') {
     fabSection.style.display = 'none';
   } else {
     fabSection.style.display = 'block';
@@ -4706,7 +4706,7 @@ function makeOspitCardHTML(p, i) {
 
 function syncOspitData() {
   if (currentWeekIdx === null) return;
-  
+  if (!document.getElementById('page-ospitalita')?.classList.contains('active')) return;
   const container = document.getElementById('ospit-cards-container');
   if (!container) return;
 
