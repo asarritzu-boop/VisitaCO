@@ -3043,7 +3043,8 @@ function showToast(msg) {
 ═══════════════════════════════════════════ */
 
 function inputToTextarea() {
-  document.querySelectorAll('input.modal-input').forEach(input => {
+  // Escludiamo esplicitamente l'input del calendario per non distruggere Flatpickr
+  document.querySelectorAll('input.modal-input:not(#m-periodo-visita)').forEach(input => {
     const ta = document.createElement('textarea');
     ta.className = input.className;
     ta.value = input.value;
@@ -7054,7 +7055,12 @@ if (typeof currentWeekIdx !== 'undefined' && currentWeekIdx !== null) {
 
 // 4. Cloniamo l'intero documento
 let docClone = document.documentElement.cloneNode(true);
-
+// Rimuovi artefatti Flatpickr dal clone per permettere la re-inizializzazione pulita
+docClone.querySelectorAll('.flatpickr-calendar').forEach(el => el.remove());
+docClone.querySelectorAll('.flatpickr-wrapper').forEach(wrapper => {
+    while (wrapper.firstChild) wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+    wrapper.parentNode.removeChild(wrapper);
+});
 // --- PULIZIA FONDAMENTALE PER I CLONI DEI CLONI ---
 // Rimuoviamo qualsiasi payload criptato ereditato dai salvataggi precedenti
 const vecchiPayload = docClone.querySelectorAll('#odg-encrypted-payload');
