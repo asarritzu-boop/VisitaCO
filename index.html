@@ -20,17 +20,20 @@
 <meta name="twitter:description" content="Programma per la visita del Sorvegliante di Circoscrizione">
 <meta name="twitter:image" content="https://asarritzu-boop.github.io/VisitaCO/icona-512.png">
 
+    <link rel="manifest" href="manifest.json">
+    
 <script>
     // Registrazione Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/ODG/sw.js')
+            // Usa un percorso relativo se sw.js è nella stessa cartella di index.html
+            navigator.serviceWorker.register('./sw.js') 
                 .then(reg => console.log('SW registrato:', reg.scope))
                 .catch(err => console.warn('SW non registrato:', err));
         });
     }
-
 </script>
+
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
