@@ -1,6 +1,6 @@
 const CACHE_NAME = 'visitaco-v1';
 const ASSETS = [
-  './visitaco.html',
+  './index.html',
   './manifest.json',
   './icona-192.png',
   './icona-512.png'
