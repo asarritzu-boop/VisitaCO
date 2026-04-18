@@ -1,0 +1,21 @@
+{
+  "short_name": "VisitaCO",
+  "name": "Visita del Sorvegliante di Circoscrizione",
+  "icons": [
+    {
+      "src": "icona-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icona-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./visitaco.html",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#1a237e"
+}
