@@ -6,7 +6,7 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#004d40",
-  "orientation": "portrait-primary",
+  
   "icons": [
     {
       "src": "/VisitaCO/icona-192.png",
