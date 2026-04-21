@@ -7668,7 +7668,12 @@ document.addEventListener('click', function(e) {
         }
     }
 });
-
+function formatLocalDate(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+    }
 // Inizializzazione del calendario a intervallo
 flatpickr("#m-periodo-visita", {
     mode: "range",
@@ -7677,8 +7682,8 @@ flatpickr("#m-periodo-visita", {
     onChange: function(selectedDates) {
         if (selectedDates.length === 2) {
             // Salviamo le date nei campi nascosti nel formato standard per l'ordinamento
-            document.getElementById('m-data-inizio').value = selectedDates[0].toISOString().split('T')[0];
-            document.getElementById('m-data-fine').value = selectedDates[1].toISOString().split('T')[0];
+            document.getElementById('m-data-inizio').value = formatLocalDate(selectedDates[0]);
+            document.getElementById('m-data-fine').value = formatLocalDate(selectedDates[1]);
         }
     }
 });
