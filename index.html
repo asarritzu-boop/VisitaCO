@@ -6808,7 +6808,7 @@ doc.setFillColor(252, 240, 240);
         subs.forEach((sub, subIndex) => {
         checkSpace(20);
     const yInizioSub = yPos;
-    yPos += 5; // padding interno superiore
+    yPos += 4; // padding interno superiore
             // 1. Sottotitolo
             const sottotitolo = sub.querySelector('input').value;
             if (sottotitolo) {
@@ -6912,7 +6912,7 @@ doc.setFillColor(252, 240, 240);
             }
             // Disegna il bordo intorno al sottopunto già stampato
            
-            yPos += 5;
+            yPos += 2;
         });
         yPos += 3;
     });
@@ -7642,7 +7642,7 @@ function ripristinaFocus() {
 function stampaTestoInline(doc, element, xStart, yStart, maxWidth) {
     let currentX = xStart;
     let currentY = yStart;
-    const lineHeight = 5.5;
+    const lineHeight = 4;
 
     function getStile(nodo) {
         let isBold = false, isItalic = false, isUnderline = false, isLink = false, linkHref = '';
