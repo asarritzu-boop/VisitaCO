@@ -10090,7 +10090,11 @@ function _buildAdunanzePDF() {
 
   doc.setFillColor(...BORD_MID); doc.rect(MX, currentY, TW, 9, 'F');
   doc.setFont('helvetica', 'bolditalic'); doc.setFontSize(11);
-  doc.text(`${w.congregazione || ''}  |  ${periodo}`, W / 2, currentY + 6, { align: 'center' });
+  
+  // MODIFICA: Creazione stringa intestazione con il nome del Sorvegliante
+  const nomeSorv = w.sorvegliante ? `Sorvegliante: ${w.sorvegliante}` : '';
+  const subTitolo = [w.congregazione, periodo, nomeSorv].filter(Boolean).join('  |  ');
+  doc.text(subTitolo, W / 2, currentY + 6, { align: 'center' });
   currentY += 16;
 
   // --- HELPER: RIGA SERVIZIO (CANTICI / PRES / PREGH) ---
@@ -10137,8 +10141,11 @@ function _buildAdunanzePDF() {
   if (infra.gemme) drawDataRow("Gemme", infra.gemme);
   if (infra.lettura) drawDataRow("Lettura", infra.lettura);
   
-  const ministero = [infra.es1, infra.es2, infra.es3, infra.es4].filter(Boolean).join("\n");
-  if (ministero) drawDataRow("Ministero", ministero);
+  // MODIFICA: Esercitazioni separate con i rispettivi titoli
+  if (infra.es1) drawDataRow("Esercitazione 1", infra.es1);
+  if (infra.es2) drawDataRow("Esercitazione 2", infra.es2);
+  if (infra.es3) drawDataRow("Esercitazione 3", infra.es3);
+  if (infra.es4) drawDataRow("Esercitazione 4", infra.es4);
 
   if (infra.canticoIntermedio) drawServiceRow([`Cantico ${infra.canticoIntermedio}`]);
 
@@ -10178,8 +10185,9 @@ function _buildAdunanzePDF() {
 
   doc.save(`Adunanze_${periodo.replace(/\s+/g, '_')}.pdf`);
   showToast('✅ PDF Generato correttamente');
-}
-
+                                    }
+    
+    
 function openGuida() {
   // Chiude il menu a tendina se è aperto
   document.getElementById('fab-menu').classList.remove('open');
