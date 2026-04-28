@@ -5304,7 +5304,7 @@ function moveVisite(index, direction) {
     }
 }
 
-async function visiteGeneraPDF() {
+    async function visiteGeneraPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   
@@ -5313,7 +5313,7 @@ async function visiteGeneraPDF() {
   const GRAY_HDR = [240, 240, 240], GRAY_LINE = [221, 221, 221], LINK_COLOR = [0, 0, 238];
 
   const w = appData.settimane[currentWeekIdx];
-  const congregazione = w.congregazione || w.sorvegliante || '---';
+  const congregazione = w.congregazione || '';
   const periodo = (w.dataInizio && w.dataFine) ? `${w.dataInizio} – ${w.dataFine}` : '---';
   const data = w.visite || [];
 
@@ -5340,10 +5340,14 @@ async function visiteGeneraPDF() {
       currentY += titleH;
       
       doc.setFillColor(BORD[0] + 30, BORD[1] + 15, BORD[2] + 20);
-
       doc.rect(MX, currentY, TW, subH, 'F');
       doc.setFont('helvetica', 'bolditalic'); doc.setFontSize(11);
-      doc.text(`${congregazione}   |   Settimana: ${periodo}`, W / 2, currentY + 6.5, { align: 'center' });
+      
+      // MODIFICA: Aggiunto nome del sorvegliante nell'intestazione
+      const nomeSorv = w.sorvegliante ? `Sorvegliante: ${w.sorvegliante}` : '';
+      const subTitolo = [congregazione, `Settimana: ${periodo}`, nomeSorv].filter(Boolean).join('   |   ');
+      
+      doc.text(subTitolo, W / 2, currentY + 6.5, { align: 'center' });
       currentY += subH + 5;
     } else {
       currentY = MY;
@@ -5362,17 +5366,25 @@ async function visiteGeneraPDF() {
   drawPageHeader(true);
 
   data.forEach((v, ri) => {
-    // 1. Calcolo preventivo dell'altezza della riga
-    const pad = 4;
+    const pad = 6;
+    const c1w = (COLS[1].w * TW) - 4;
+    
+    // 1. Calcolo linee per tutte le colonne
+    doc.setFontSize(9);
+    const visitaALines = doc.splitTextToSize(`Visita a: ${v.visitaA || ''}`, c1w);
+    const insiemeALines = doc.splitTextToSize(`Con: ${v.insiemeA || ''}`, c1w);
+    
     doc.setFontSize(8);
     const addrLines = doc.splitTextToSize(v.indirizzo || '', (COLS[2].w * TW) - 4);
     const noteLines = doc.splitTextToSize(v.note || '', (COLS[3].w * TW) - 4);
     
-    // L'altezza riga è determinata dal contenuto più lungo (minimo 14mm)
-    const textHeight = Math.max(addrLines.length * 4, noteLines.length * 4, 12);
+    // L'altezza riga ora calcola anche l'ingombro della colonna "Dettagli"
+    // (calcoliamo circa 4.5mm per ogni riga in grassetto/dettagli e 4mm per le note)
+    const detailsHeight = (visitaALines.length * 4.5) + (insiemeALines.length * 4.5) + 2; 
+    const textHeight = Math.max(addrLines.length * 4, noteLines.length * 4, detailsHeight, 12);
     const dynamicRowH = textHeight + pad;
 
-    // 2. Controllo salto pagina (se la riga non ci sta nel foglio)
+    // 2. Controllo salto pagina
     if (currentY + dynamicRowH > 280) {
       doc.setDrawColor(...BORD); doc.rect(MX, tableStartY, TW, currentY - tableStartY);
       doc.addPage();
@@ -5390,12 +5402,14 @@ async function visiteGeneraPDF() {
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(80, 80, 80);
     doc.text(v.ora || '', c0cx, currentY + 10, { align: 'center' });
 
-    // Col 1: Dettagli
-    const c1cx = colX[1] + COLS[1].w * TW / 2, c1w = (COLS[1].w * TW) - 4;
+    // Col 1: Dettagli (Visita a + Insieme a posizionati in modo dinamico)
+    const c1cx = colX[1] + COLS[1].w * TW / 2;
     doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(0, 0, 0);
-    doc.text(doc.splitTextToSize(`Visita a: ${v.visitaA || ''}`, c1w), c1cx, currentY + 6, { align: 'center' });
+    doc.text(visitaALines, c1cx, currentY + 6, { align: 'center' });
+    
+    const nextY = currentY + 6 + (visitaALines.length * 4.5); // Sposta in basso in base a quante righe occupa "Visita a"
     doc.setFont('helvetica', 'normal'); doc.setTextColor(60, 60, 60);
-    doc.text(doc.splitTextToSize(`Con: ${v.insiemeA || ''}`, c1w), c1cx, currentY + 10, { align: 'center' });
+    doc.text(insiemeALines, c1cx, nextY, { align: 'center' });
 
     // Col 2: Indirizzo (Cliccabile e Sottolineato)
     const c2cx = colX[2] + COLS[2].w * TW / 2;
@@ -5419,7 +5433,7 @@ async function visiteGeneraPDF() {
       }
     }
 
-    // Col 3: Note (Dinamiche)
+    // Col 3: Note
     const c3cx = colX[3] + COLS[3].w * TW / 2;
     doc.setFont('helvetica', 'italic'); doc.setFontSize(8); doc.setTextColor(40, 40, 40);
     doc.text(noteLines, c3cx, currentY + 6, { align: 'center' });
@@ -5438,9 +5452,12 @@ async function visiteGeneraPDF() {
   doc.setDrawColor(...BORD); doc.setLineWidth(0.3);
   doc.rect(MX, tableStartY, TW, currentY - tableStartY);
 
-  doc.save(`Visite_Pastorali_${congregazione.replace(/\s+/g, '_')}.pdf`);
+  // Nome file pulito e generazione
+  const nomeFilePulito = congregazione.replace(/\s+/g, '_');
+  doc.save(`Visite_Pastorali_${nomeFilePulito}.pdf`);
   if (typeof showToast === 'function') showToast('✅ PDF Visite generato!');
-}
+    }
+    
 
 
 
