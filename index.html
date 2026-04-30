@@ -8261,6 +8261,8 @@ let currentFolderId = null;
             if (!parent.subfolders) parent.subfolders = [];
             parent.subfolders.push({ id: 'f_' + Date.now(), name: name.trim(), files: [], subfolders: [] });
             renderFiles();
+            salvaInLocale();
+            modificheNonSalvate = true;
             if (document.getElementById('fab-section-menu').classList.remove('open')) {
         toggleFab();
     }
@@ -8994,6 +8996,8 @@ function deleteArticle(event, id, folderId) {
             if (name) {
                 window.ARCHIVE_DATA.folders.push({ id: 'f_' + Date.now(), name: name.trim(), files: [], subfolders: [] });
                 renderFolders();
+                salvaInLocale();
+            modificheNonSalvate = true;2
                 if (document.getElementById('fab-section-menu').classList.remove('open')) {
         toggleFab();
         
