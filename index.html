@@ -3864,20 +3864,20 @@ function _buildProspettoPDF() {
   // ══ 3. SM / ANZIANI ══
   y = sectionHeader('Adunanza SM / Anziani', y);
   y = cardRow('', formattaDatiAdunanza(smanz), y);
-  y = cardRow('', smanz.luogo ? smanz.luogo : '', y);
+  
   y += 2;
 
   // ══ 4. PIONIERI ══
   y = sectionHeader('Adunanza Pionieri', y);
   y = cardRow('', formattaDatiAdunanza(pion), y);
-  y = cardRow('', pion.luogo ? pion.luogo : '', y);
+  
   y += 2;
 
   // ══ 5. ADUNANZA PUBBLICA ══
   y = sectionHeader('Adunanza Pubblica', y);
   y = cardRow('', formattaDatiAdunanza(pub), y);
   y = cardRow('Discorso Pubblico', pub.tema1, y);
-  y = cardRow('Studio Torre di Guardia', pub.tema2, y);
+  y = cardRow('Discorso Finale', pub.tema2, y);
 
   // ══ FOOTER ══
   doc.setFillColor(...BORDEAUX);
