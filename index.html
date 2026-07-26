@@ -6544,10 +6544,12 @@ overlay.querySelector('#btn-scarica-zip').onclick = () => { const b=atob(base64.
                                 </div>
                                 <div style="display:flex;gap:8px;">
                                     <button id="btn-jwpub-app" style="flex:1;background:#6D0E0E;color:white;border:none;border-radius:8px;padding:8px 10px;font-size:13px;cursor:pointer;">📲 Apri in app</button>
+                                    <button id="btn-jwpub-elimina" style="flex:1;background:#ff9800;color:white;border:none;border-radius:8px;padding:8px 10px;font-size:13px;cursor:pointer;">🗑️ Elimina</button>
                                     <button id="btn-jwpub-dl" style="flex:1;background:#e8f5e9;color:#2e7d32;border:1px solid #2e7d32;border-radius:8px;padding:8px 10px;font-size:13px;cursor:pointer;">⬇ Scarica</button>
                                 </div>`;
                             document.body.appendChild(dlOverlay);
                             dlOverlay.querySelector('#btn-jwpub-close').onclick = () => dlOverlay.remove();
+                           dlOverlay.querySelector('#btn-jwpub-elimina').onclick = () => { if(confirm("Eliminare l'allegato?")) { item.remove(); dlOverlay.remove(); } };
 
                             const scarica = () => {
                                 const b = atob(base64.split(',')[1]);
