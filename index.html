@@ -4970,7 +4970,7 @@ function syncOspitData() {
   });
 
   appData.settimane[currentWeekIdx].ospitalita = cardsFiltrate;
-  
+  ospitCardData = JSON.parse(JSON.stringify(cardsFiltrate));
   const noteEl = document.getElementById('ospit-appunti');
   if (noteEl) {
     appData.settimane[currentWeekIdx].ospitNote = noteEl.value;
